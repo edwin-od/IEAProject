@@ -83,7 +83,6 @@ class DecisionTable:
 
         #Create new table (and find root + child tables, etc.) for each option of root
         for option in maxGainFeature.options:
-            count = 0
             index = 0
             tempTarget = TargetFeature(this.target.name, this.target.options, [])
             tempFeatures = []
@@ -93,7 +92,6 @@ class DecisionTable:
                 tempFeatures.append(Feature(feature.name, feature.options, [], tempTarget))
             for value in maxGainFeature.values:
                 if value == option:
-                    count = count + 1
                     tempTarget.values.append(this.target.values[index])
                     for tempFeature in tempFeatures:
                         for feature in this.features:
