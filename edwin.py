@@ -1,13 +1,16 @@
 import math
 
-class TargetFeature:
-    def __init__(this, name, options, values):
+class Feature:
+    def __init__(this, name, options, values, target):
         this.name = name
         this.options = options
         this.values = values
+        this.target = target
 
     #Calculating the target feature's entropy
     def H(this):
+        if this.target != None:
+            return 1
         h = 0
         for option in this.options:
             count = 0
@@ -19,22 +22,16 @@ class TargetFeature:
             f = count / len(this.values)
             h -= f * math.log2(f)
         return h
-
-        
-class Feature:
-    def __init__(this, name, options, values, target):
-        this.name = name
-        this.options = options
-        this.values = values
-        this.target = target
-
+    
     #Calculating the feature's gain according to the specified target feature
     def G(this):
+        if this.target == None:
+            return 0
         g = this.target.H()
         for option in this.options:
             count = 0
             index = 0
-            tempTarget = TargetFeature(this.target.name, this.target.options, [])
+            tempTarget = Feature(this.target.name, this.target.options, [], None)
             for value in this.values:
                 if value == option:
                     count = count + 1
@@ -46,6 +43,9 @@ class Feature:
             g -= f * tempTarget.H()
         return g
 
+class Input:
+    def __init__(this, features):
+        this.features = features
 
 class TreeNode:
     def __init__(this, name, parent, parentLink, children):
@@ -53,6 +53,22 @@ class TreeNode:
         this.parent = parent
         this.parentLink = parentLink
         this.children = children
+
+    def traverse(this, In):
+        if this.children == None:
+            return this.name
+        
+        #Find the feature
+        f = None
+        for feature in In.features:
+            if feature == this.name:
+                f = feature
+        if f == None:
+            raise Exception("Error: The feature '" + this.name + "' is missing")
+        for child in this.children:
+            if child.parentLink == In.features[f]:
+                return child.traverse(In)
+        return "Unidentified"
 
     def printTree(this):
         print(this.name)
@@ -81,15 +97,15 @@ class DecisionTable:
                 maxGainFeature = feature
         tree = TreeNode(maxGainFeature.name, None, None, [])
 
-        #Create new table (and find root + child tables, etc.) for each option of root
+        #Create new table (and find new root + child tables, etc. - repeat until pure sets achieved) for each option of root
         for option in maxGainFeature.options:
-            index = 0
-            tempTarget = TargetFeature(this.target.name, this.target.options, [])
+            tempTarget = Feature(this.target.name, this.target.options, [], None)
             tempFeatures = []
             for feature in this.features:
                 if feature.name == maxGainFeature.name:
                     continue
                 tempFeatures.append(Feature(feature.name, feature.options, [], tempTarget))
+            index = 0
             for value in maxGainFeature.values:
                 if value == option:
                     tempTarget.values.append(this.target.values[index])
@@ -111,13 +127,23 @@ class DecisionTable:
 
 #Test Example Chapter 7 Exercise 7.3
 
-Accept = TargetFeature("Acceptable", ["Yes", "No"], ["Yes", "No", "Yes", "No", "Yes"])
+##Accept = Feature("Acceptable", ["Yes", "No"], ["Yes", "No", "Yes", "No", "Yes"], None)
+##furn = Feature("Furniture", ["Yes", "No"], ["No", "Yes", "No", "No", "Yes"], Accept)
+##rooms = Feature("Nr Rooms", [3, 4], [3, 3, 4, 3, 4], Accept)
+##newKit = Feature("New Kitchen", ["Yes", "No"], ["Yes", "No", "No", "No", "No"], Accept)
+##table = DecisionTable([furn, rooms, newKit], Accept)
+##tree = table.generateDecisionTree()
+##tree.printTree()
 
-furn = Feature("Furniture", ["Yes", "No"], ["No", "Yes", "No", "No", "Yes"], Accept)
-rooms = Feature("Nr Rooms", [3, 4], [3, 3, 4, 3, 4], Accept)
-newKit = Feature("New Kitchen", ["Yes", "No"], ["Yes", "No", "No", "No", "No"], Accept)
+#Test Example Chapter 7 Exercise 7.4
 
-table = DecisionTable([furn, rooms, newKit], Accept)
-
+Sunburn = Feature("Sunburn", ["Yes", "No"], ["Yes", "No", "No", "Yes", "No", "No"], None)
+Hair = Feature("Hair", ["Blond", "Brown"], ["Blond", "Blond", "Brown", "Blond", "Blond", "Brown"], Sunburn)
+Height = Feature("Height", ["Average", "Tall", "Short"], ["Average", "Tall", "Short", "Short", "Tall", "Tall"], Sunburn)
+Lotion = Feature("Lotion", ["Yes", "No"], ["No", "Yes", "Yes", "No", "No", "No"], Sunburn)
+table = DecisionTable([Hair, Height, Lotion], Sunburn)
 tree = table.generateDecisionTree()
 tree.printTree()
+
+newInput = Input({"Hair": "Brown", "Height": "Average", "Lotion": "No"})
+print(tree.traverse(newInput))
