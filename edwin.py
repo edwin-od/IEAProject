@@ -123,6 +123,10 @@ class DecisionTable:
         return tree
 
 
+
+
+
+
 #Test Example Chapter 7 Exercise 7.3
 
 Accept = Feature("Acceptable", ["Yes", "No"], ["Yes", "No", "Yes", "No", "Yes"], None)
@@ -138,6 +142,10 @@ print("\n")
 newInput = {"Furniture": "Yes", "Nr Rooms": 3, "New Kitchen": "No"}
 print(newInput)
 print("Acceptable? " + tree.traverse(newInput))
+
+
+
+
 
 #Test Example Chapter 7 Exercise 7.4
 
