@@ -1,5 +1,6 @@
 import cv2
 import os
+import numpy as np
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 img = cv2.imread('img4.jpg')
@@ -11,11 +12,20 @@ for (x,y,w,h) in faces :
 
 imgCropped = img[y+3:y+h-2,x+3:x+w-2]
 grayImage = cv2.cvtColor(imgCropped, cv2.COLOR_BGR2GRAY)
-(thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 100, 255, cv2.THRESH_BINARY)
+(thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 145, 255, cv2.THRESH_BINARY)
+
+#get pixels
+white_pix = np.sum(blackAndWhiteImage == 255)
+black_pix = np.sum(blackAndWhiteImage == 0) 
+print('Total number of pixels:', white_pix+black_pix)
+print('Number of white pixels:', white_pix)
+print('Number of white pixels:', black_pix)
+
 #produce the output
 cv2.imshow('face detected', img)
 cv2.imshow('gray', grayImage)
 cv2.imshow('cropped face resized', imgCropped)
 cv2.imshow('Black white image', blackAndWhiteImage)
 cv2.waitKey()
+
 
