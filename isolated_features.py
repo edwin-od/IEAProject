@@ -78,3 +78,48 @@ class IsolatedFeatures:
             [landmarks.part(55).x, landmarks.part(55).y],
             [landmarks.part(53).x, landmarks.part(53).y]
         ])
+        this.FullFace = np.array([
+            [landmarks.part(0).x, landmarks.part(0).y],
+            [landmarks.part(1).x, landmarks.part(1).y],
+            [landmarks.part(2).x, landmarks.part(2).y],
+            [landmarks.part(3).x, landmarks.part(3).y],
+            [landmarks.part(4).x, landmarks.part(4).y],
+            [landmarks.part(5).x, landmarks.part(5).y],
+            [landmarks.part(6).x, landmarks.part(6).y],
+            [landmarks.part(7).x, landmarks.part(7).y],
+            [landmarks.part(8).x, landmarks.part(8).y],
+            [landmarks.part(9).x, landmarks.part(9).y],
+            [landmarks.part(10).x, landmarks.part(10).y],
+            [landmarks.part(11).x, landmarks.part(11).y],
+            [landmarks.part(12).x, landmarks.part(12).y],
+            [landmarks.part(13).x, landmarks.part(13).y],
+            [landmarks.part(14).x, landmarks.part(14).y],
+            [landmarks.part(15).x, landmarks.part(15).y],
+            [landmarks.part(16).x, landmarks.part(16).y],
+            [landmarks.part(26).x, landmarks.part(26).y],
+            [landmarks.part(25).x, landmarks.part(25).y],
+            [landmarks.part(24).x, landmarks.part(24).y],
+            [landmarks.part(23).x, landmarks.part(23).y],
+            [landmarks.part(22).x, landmarks.part(22).y],
+            [landmarks.part(21).x, landmarks.part(21).y],
+            [landmarks.part(20).x, landmarks.part(20).y],
+            [landmarks.part(19).x, landmarks.part(19).y],
+            [landmarks.part(18).x, landmarks.part(18).y],
+            [landmarks.part(17).x, landmarks.part(17).y]
+        ])
+        this.LeftUnderEye = np.array([
+            [landmarks.part(36).x, landmarks.part(36).y],
+            [landmarks.part(41).x, landmarks.part(41).y],
+            [landmarks.part(40).x, landmarks.part(40).y],
+            [landmarks.part(39).x, landmarks.part(39).y],
+            [landmarks.part(39).x, landmarks.part(29).y],
+            [landmarks.part(36).x, landmarks.part(29).y]
+        ])
+        this.RightUnderEye = np.array([
+            [landmarks.part(42).x, landmarks.part(42).y],
+            [landmarks.part(47).x, landmarks.part(47).y],
+            [landmarks.part(46).x, landmarks.part(46).y],
+            [landmarks.part(45).x, landmarks.part(45).y],
+            [landmarks.part(45).x, landmarks.part(29).y],
+            [landmarks.part(42).x, landmarks.part(29).y]
+        ])
