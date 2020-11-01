@@ -15,11 +15,6 @@ detector = dlib.get_frontal_face_detector()
 predictor =  dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 face = detector(gray)[0]
-x1 = face.left()
-y1 = face.top()
-
-x2 = face.right()
-y2 = face.bottom()
 
 landmarks = predictor(gray, face)
 
@@ -60,9 +55,7 @@ outG[mask] = gray[mask]
 cv2.polylines(img, [np.int32(features.CheeksBeard)], True, (255, 0, 0), 3)
 
 for i in range(68):
-    x = landmarks.part(i).x
-    y = landmarks.part(i).y
-##    cv2.circle(img, (x, y), 3, (0, 255, 0), -1)
+    cv2.circle(img, (landmarks.part(i).x, landmarks.part(i).y), 3, (0, 255, 0), -1)
     
 cv2.imshow("Mask1", outG)
 cv2.imshow("Mask2", outBW)  
