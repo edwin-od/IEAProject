@@ -4,10 +4,9 @@ import dlib
 
 from isolated_features import IsolatedFeatures
 
-#r = 8
+#r = 11
 
-for r in range(1, 15):
-
+for r in range(1, 15):    
     url = 'input' + str(r) + '.jpg'
 
     img = cv2.imread(url)
@@ -46,13 +45,17 @@ for r in range(1, 15):
     else:
         mask = RightMask
         poly = features.RightCheek
-        
+
+    FaceMask = np.zeros((img.shape[0], img.shape[1]))
+    cv2.fillConvexPoly(FaceMask, features.FullFace, 1)
+    FaceMask = FaceMask.astype(np.bool)
+
     threshold = np.sum(gray[mask]) / np.sum(mask == 1)
 
     (thresh, blackAndWhiteImage) = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
 
     black_pix = int((np.sum(blackAndWhiteImage[mask] == 0) / np.sum(mask == 1)) * 100)
-    print(str(r), 'black:', black_pix, '%')
+    print('Y', str(r), 'black:', black_pix, '%')
 
     outBW = np.zeros_like(blackAndWhiteImage)
     outBW[mask] = blackAndWhiteImage[mask]
@@ -60,11 +63,13 @@ for r in range(1, 15):
     outG = np.zeros_like(gray)
     outG[mask] = gray[mask]
 
-    cv2.polylines(img, [np.int32(poly)], True, (255, 0, 0), 3)
+##    cv2.polylines(img, [np.int32(features.RightUnderEye)], True, (255, 0, 0), 2)
+##    cv2.polylines(outBW, [np.int32(features.RightUnderEye)], True, (255, 0, 0), 1)
+##    cv2.polylines(outG, [np.int32(features.RightUnderEye)], True, (255, 0, 0), 1)
 
     ##for i in range(68):
     ##    cv2.circle(img, (landmarks.part(i).x, landmarks.part(i).y), 3, (0, 255, 0), -1)
-    
+
 ##cv2.imshow("Mask1", outG)
 ##cv2.imshow("Mask2", outBW)  
 ##cv2.imshow("Face", img)
