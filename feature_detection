@@ -1,20 +1,23 @@
-Lips = np.array([
-        [landmarks.part(61).x, landmarks.part(61).y],
-        [landmarks.part(50).x, landmarks.part(50).y],
-        [landmarks.part(49).x, landmarks.part(49).y],
-        [landmarks.part(48).x, landmarks.part(48).y],
-        [landmarks.part(59).x, landmarks.part(59).y],
-        [landmarks.part(58).x, landmarks.part(58).y],
-        [landmarks.part(57).x, landmarks.part(57).y],
-        [landmarks.part(56).x, landmarks.part(56).y],
-        [landmarks.part(55).x, landmarks.part(55).y],
-        [landmarks.part(54).x, landmarks.part(54).y],
-        [landmarks.part(53).x, landmarks.part(53).y],
-        [landmarks.part(52).x, landmarks.part(52).y],
-        [landmarks.part(63).x, landmarks.part(63).y],
-        [landmarks.part(64).x, landmarks.part(64).y],
-        [landmarks.part(65).x, landmarks.part(65).y],
-        [landmarks.part(66).x, landmarks.part(66).y],
-        [landmarks.part(67).x, landmarks.part(67).y],
-        [landmarks.part(60).x, landmarks.part(60).y]
-    ])
+poly = LeftCheekNoBeard
+facePoly = FaceNoBeard
+
+mask = np.zeros((img.shape[0], img.shape[1]))
+cv2.fillConvexPoly(mask, poly, 1)
+mask = mask.astype(np.bool)
+
+faceMask = np.zeros((img.shape[0], img.shape[1]))
+cv2.fillConvexPoly(faceMask, facePoly, 1)
+faceMask = faceMask.astype(np.bool)
+
+SUM_pix_gray = np.sum(gray[faceMask])
+AVG_pix_gray = SUM_pix_gray / np.sum(faceMask == 1)
+
+(thresh, blackAndWhiteImage) = cv2.threshold(gray, AVG_pix_gray - 15, 255, cv2.THRESH_BINARY)
+
+#get pixels
+white_pix = int((np.sum(blackAndWhiteImage[mask] == 255) / np.sum(mask == 1)) * 100)
+black_pix = int((np.sum(blackAndWhiteImage[mask] == 0) / np.sum(mask == 1)) * 100)
+print('URL:', url)
+print('AVG:', AVG_pix_gray)
+print('white:', white_pix, '%')
+print('black:', black_pix, '%')
