@@ -21,3 +21,5 @@ print('URL:', url)
 print('AVG:', AVG_pix_gray)
 print('white:', white_pix, '%')
 print('black:', black_pix, '%')
+
+cv2.polylines(img, [np.int32(poly)], True, (255, 0, 0), 3)
