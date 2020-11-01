@@ -4,7 +4,7 @@ import dlib
 
 from isolated_features import IsolatedFeatures
 
-#r = 11
+#r = 8
 
 for r in range(1, 15):    
     url = 'input' + str(r) + '.jpg'
@@ -24,7 +24,7 @@ for r in range(1, 15):
 
     #Average Face Brightness
     fullMask = np.zeros((img.shape[0], img.shape[1]))
-    cv2.fillConvexPoly(fullMask, features.FullCheeks, 1)
+    cv2.fillConvexPoly(fullMask, features.FullFace, 1)
     fullMask = fullMask.astype(np.bool)
     AVG_pix_gray = np.sum(gray[fullMask]) / np.sum(fullMask == 1)
     (thresh, blackAndWhiteImage) = cv2.threshold(gray, AVG_pix_gray, 255, cv2.THRESH_BINARY)
@@ -50,9 +50,10 @@ for r in range(1, 15):
     cv2.fillConvexPoly(FaceMask, features.FullFace, 1)
     FaceMask = FaceMask.astype(np.bool)
 
-    threshold = np.sum(gray[mask]) / np.sum(mask == 1)
+    #threshold = np.sum(gray[mask]) / np.sum(mask == 1)
+    #threshold = np.mean(gray[mask])
 
-    (thresh, blackAndWhiteImage) = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+    blackAndWhiteImage = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 25, 3)
 
     black_pix = int((np.sum(blackAndWhiteImage[mask] == 0) / np.sum(mask == 1)) * 100)
     print('Y', str(r), 'black:', black_pix, '%')
@@ -63,9 +64,9 @@ for r in range(1, 15):
     outG = np.zeros_like(gray)
     outG[mask] = gray[mask]
 
-##    cv2.polylines(img, [np.int32(features.RightUnderEye)], True, (255, 0, 0), 2)
-##    cv2.polylines(outBW, [np.int32(features.RightUnderEye)], True, (255, 0, 0), 1)
-##    cv2.polylines(outG, [np.int32(features.RightUnderEye)], True, (255, 0, 0), 1)
+    cv2.polylines(img, [np.int32(poly)], True, (255, 0, 0), 2)
+    cv2.polylines(outBW, [np.int32(poly)], True, (255, 0, 0), 1)
+    cv2.polylines(outG, [np.int32(poly)], True, (255, 0, 0), 1)
 
     ##for i in range(68):
     ##    cv2.circle(img, (landmarks.part(i).x, landmarks.part(i).y), 3, (0, 255, 0), -1)
