@@ -1,0 +1,135 @@
+import cv2
+import numpy as np
+import dlib
+
+url = 'input3.jpg'
+
+img = cv2.imread(url)
+img = cv2.resize(img, (320, 400),  interpolation = cv2.INTER_AREA)
+
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #transform to gray
+
+detector = dlib.get_frontal_face_detector()
+predictor =  dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+
+faces = detector(gray)
+for face in faces:
+    x1 = face.left()
+    y1 = face.top()
+
+    x2 = face.right()
+    y2 = face.bottom()
+
+    landmarks = predictor(gray, face)
+    FaceNoBeard = np.array([
+        [landmarks.part(0).x, landmarks.part(0).y],
+        [landmarks.part(1).x, landmarks.part(1).y],
+        [landmarks.part(2).x, landmarks.part(2).y],
+        [landmarks.part(3).x, landmarks.part(3).y],
+        [landmarks.part(4).x, landmarks.part(4).y],
+        [landmarks.part(5).x, landmarks.part(5).y],
+        [landmarks.part(6).x, landmarks.part(6).y],
+        [landmarks.part(7).x, landmarks.part(7).y],
+        [landmarks.part(8).x, landmarks.part(8).y],
+        [landmarks.part(9).x, landmarks.part(9).y],
+        [landmarks.part(10).x, landmarks.part(10).y],
+        [landmarks.part(11).x, landmarks.part(11).y],
+        [landmarks.part(12).x, landmarks.part(12).y],
+        [landmarks.part(13).x, landmarks.part(13).y],
+        [landmarks.part(14).x, landmarks.part(14).y],
+        [landmarks.part(15).x, landmarks.part(15).y],
+        [landmarks.part(16).x, landmarks.part(16).y],
+        [landmarks.part(26).x, landmarks.part(26).y],
+        [landmarks.part(25).x, landmarks.part(25).y],
+        [landmarks.part(24).x, landmarks.part(24).y],
+        [landmarks.part(23).x, landmarks.part(23).y],
+        [landmarks.part(22).x, landmarks.part(22).y],
+        [landmarks.part(21).x, landmarks.part(21).y],
+        [landmarks.part(20).x, landmarks.part(20).y],
+        [landmarks.part(19).x, landmarks.part(19).y],
+        [landmarks.part(18).x, landmarks.part(18).y],
+        [landmarks.part(17).x, landmarks.part(17).y]
+    ])
+    FaceBeard = np.array([
+        [landmarks.part(0).x, landmarks.part(0).y],
+        [landmarks.part(1).x, landmarks.part(1).y],
+        [landmarks.part(18).x, landmarks.part(31).y],
+        [landmarks.part(40).x, landmarks.part(31).y],
+        [landmarks.part(31).x, landmarks.part(31).y],
+        [landmarks.part(33).x, landmarks.part(33).y],
+        [landmarks.part(35).x, landmarks.part(35).y],
+        [landmarks.part(47).x, landmarks.part(35).y],
+        [landmarks.part(25).x, landmarks.part(35).y],
+        [landmarks.part(15).x, landmarks.part(15).y],
+        [landmarks.part(16).x, landmarks.part(16).y],
+        [landmarks.part(26).x, landmarks.part(26).y],
+        [landmarks.part(25).x, landmarks.part(25).y],
+        [landmarks.part(24).x, landmarks.part(24).y],
+        [landmarks.part(23).x, landmarks.part(23).y],
+        [landmarks.part(22).x, landmarks.part(22).y],
+        [landmarks.part(21).x, landmarks.part(21).y],
+        [landmarks.part(20).x, landmarks.part(20).y],
+        [landmarks.part(19).x, landmarks.part(19).y],
+        [landmarks.part(18).x, landmarks.part(18).y],
+        [landmarks.part(17).x, landmarks.part(17).y]
+    ])
+    LeftCheekBeard = np.array([
+        [landmarks.part(40).x, landmarks.part(31).y],
+        [landmarks.part(18).x, landmarks.part(31).y],
+        [landmarks.part(17).x, landmarks.part(29).y],
+        [landmarks.part(17).x, landmarks.part(28).y],
+        [landmarks.part(21).x, landmarks.part(28).y],
+        [landmarks.part(21).x, landmarks.part(29).y]
+    ])
+    LeftCheekNoBeard = np.array([
+        [landmarks.part(40).x, landmarks.part(31).y],
+        [landmarks.part(48).x, landmarks.part(48).y],
+        [landmarks.part(3).x, landmarks.part(3).y],
+        [landmarks.part(1).x, landmarks.part(1).y],
+        [landmarks.part(17).x, landmarks.part(28).y],
+        [landmarks.part(21).x, landmarks.part(28).y],
+        [landmarks.part(21).x, landmarks.part(29).y]
+    ])
+
+    poly = LeftCheekNoBeard
+    facePoly = FaceNoBeard
+
+    mask = np.zeros((img.shape[0], img.shape[1]))
+    cv2.fillConvexPoly(mask, poly, 1)
+    mask = mask.astype(np.bool)
+
+    faceMask = np.zeros((img.shape[0], img.shape[1]))
+    cv2.fillConvexPoly(faceMask, facePoly, 1)
+    faceMask = faceMask.astype(np.bool)
+    
+    SUM_pix_gray = np.sum(gray[faceMask])
+    AVG_pix_gray = SUM_pix_gray / np.sum(faceMask == 1)
+    
+    (thresh, blackAndWhiteImage) = cv2.threshold(gray, AVG_pix_gray - 15, 255, cv2.THRESH_BINARY)
+
+    #get pixels
+    white_pix = int((np.sum(blackAndWhiteImage[mask] == 255) / np.sum(mask == 1)) * 100)
+    black_pix = int((np.sum(blackAndWhiteImage[mask] == 0) / np.sum(mask == 1)) * 100)
+    print('URL:', url)
+    print('AVG:', AVG_pix_gray)
+    print('white:', white_pix, '%')
+    print('black:', black_pix, '%')
+
+    outBW = np.zeros_like(blackAndWhiteImage)
+    outBW[mask] = blackAndWhiteImage[mask]
+
+    outG = np.zeros_like(gray)
+    outG[mask] = gray[mask]
+
+    #cv2.polylines(img, [np.int32(poly)], True, (255, 0, 0), 3)
+    
+    cv2.polylines(img, [np.int32(facePoly)], True, (255, 0, 0), 3)
+    
+    for i in range(68):
+        x = landmarks.part(i).x
+        y = landmarks.part(i).y
+        cv2.circle(img, (x, y), 3, (0, 255, 0), -1)
+    
+cv2.imshow("Mask1", outG)
+cv2.imshow("Mask2", outBW)  
+cv2.imshow("Face", img)
