@@ -47,7 +47,7 @@ for r in range(1, 15):
         mask = RightMask
         poly = features.RightCheek
         
-    threshold = np.sum(gray[mask] - 25) / np.sum(mask == 1)
+    threshold = np.sum(gray[mask]) / np.sum(mask == 1)
 
     (thresh, blackAndWhiteImage) = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
 
