@@ -1,4 +1,38 @@
-this.FullLips = np.array([
+import numpy as np
+
+class IsolatedFeatures:
+    def __init__(this, landmarks):
+        this.FullCheeks = np.array([
+            [landmarks.part(28).x, landmarks.part(28).y],
+            [landmarks.part(17).x, landmarks.part(28).y],
+            [landmarks.part(17).x, landmarks.part(29).y],
+            [landmarks.part(18).x, landmarks.part(31).y],
+            [landmarks.part(40).x, landmarks.part(31).y],
+            [landmarks.part(30).x, landmarks.part(30).y],
+            [landmarks.part(47).x, landmarks.part(35).y],
+            [landmarks.part(25).x, landmarks.part(35).y],
+            [landmarks.part(26).x, landmarks.part(29).y],
+            [landmarks.part(26).x, landmarks.part(28).y]
+        ])
+        this.LeftCheek = np.array([
+            [landmarks.part(40).x, landmarks.part(31).y],
+            [landmarks.part(48).x, landmarks.part(48).y],
+            [landmarks.part(3).x, landmarks.part(3).y],
+            [landmarks.part(1).x, landmarks.part(1).y],
+            [landmarks.part(17).x, landmarks.part(28).y],
+            [landmarks.part(21).x, landmarks.part(28).y],
+            [landmarks.part(21).x, landmarks.part(29).y]
+        ])
+        this.RightCheek = np.array([
+            [landmarks.part(47).x, landmarks.part(35).y],
+            [landmarks.part(54).x, landmarks.part(54).y],
+            [landmarks.part(13).x, landmarks.part(13).y],
+            [landmarks.part(14).x, landmarks.part(14).y],
+            [landmarks.part(26).x, landmarks.part(28).y],
+            [landmarks.part(22).x, landmarks.part(28).y],
+            [landmarks.part(22).x, landmarks.part(29).y]
+        ])
+        this.FullLips = np.array([
             [landmarks.part(61).x, landmarks.part(61).y],
             [landmarks.part(50).x, landmarks.part(50).y],
             [landmarks.part(49).x, landmarks.part(49).y],
