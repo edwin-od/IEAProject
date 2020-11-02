@@ -64,7 +64,6 @@ def calculateFacePercentage(url, feature, AdaptiveBlockSize, AdaptiveC): #featur
 
     blackAndWhiteImage = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                                cv2.THRESH_BINARY, AdaptiveBlockSize, AdaptiveC)
-
     return int((np.sum(blackAndWhiteImage[mask] == 0) / np.sum(mask == 1)) * 100)
 
 
@@ -93,8 +92,8 @@ arrCheeks = []
 arrUnderEye = []
 arrLips = []
 
-YoungScans = 30
-OldScans = 30
+YoungScans = 31
+OldScans = 31
 
 for r in range(1, YoungScans + OldScans + 1):
     zeros = ''
@@ -141,15 +140,9 @@ for r in range(1, YoungScans + OldScans + 1):
         sumOldCheeks += cheek
         sumOldUnderEye += underEye
         sumOldLips += lips
-    else:
-        break
     arrCheeks.append(cheek)
     arrUnderEye.append(underEye)
     arrLips.append(lips)
-
-print('cheeks array', len(arrCheeks))
-print('under eye array', len(arrUnderEye))
-print('lips array', len(arrLips))
 
 AverageYoungCheeks = sumYoungCheeks / YoungScans
 AverageOldCheeks = sumOldCheeks / OldScans
@@ -188,14 +181,16 @@ for i in range(0, YoungScans + OldScans):
             youngLipsO += 1
         else:
             oldLipsO += 1
-    else:
-        break
+
+print(arrCheeks)
+print(arrUnderEye)
+print(arrLips)
         
 print( 'Cheeks Efficiency -> Young',int(((youngCheeksY-oldCheeksY)/youngCheeksY)*100),'% Old',
-       int(((youngCheeksO-oldCheeksO)/youngCheeksO)*100))
+       int(((youngCheeksO-oldCheeksO)/youngCheeksO)*100), '%')
 
 print( 'Under Eye Efficiency -> Young',int(((youngUnderEyeY-oldUnderEyeY)/youngUnderEyeY)*100),'% Old',
-       int(((youngUnderEyeO-oldUnderEyeO)/youngUnderEyeO)*100))
+       int(((youngUnderEyeO-oldUnderEyeO)/youngUnderEyeO)*100), '%')
 
 print( 'Cheeks Efficiency -> Young',int(((youngLipsY-oldLipsY)/youngLipsY)*100),'% Old',
-       int(((youngLipsO-oldLipsO)/youngLipsO)*100))
+       int(((youngLipsO-oldLipsO)/youngLipsO)*100), '%')
