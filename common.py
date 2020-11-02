@@ -114,9 +114,10 @@ for r in range(1, YoungScans + 1):
     lips = calculateFacePercentage(url, 2, 11, 4)
     if min(cheek, underEye, lips) == -1:
         YoungScans -= 1
-        print('Young Scans', YoungScans)
+        print('ERROR: Young Scans decreased from', YoungScans + 1, 'to', YoungScans)
         continue
-    print('Y', r, 'c', cheek, 'u_e', underEye, 'l', lips)
+    pr = 'Y'+str(r)+' -> '+'cheeks: '+str(cheek)+'% | under eye: '+str(underEye)+'% | lips: '+str(lips)
+    print(pr)
     sumCheeks += cheek
     sumUnderEye += underEye
     sumLips += lips
@@ -143,9 +144,10 @@ for r in range(1, OldScans + 1):
     lips = calculateFacePercentage(url, 2, 11, 4)
     if min(cheek, underEye, lips) == -1:
         OldScans -= 1
-        print('Old Scans', OldScans)
+        print('ERROR: Old Scans decreased from', OldScans + 1, 'to', OldScans)
         continue
-    print('O', r, 'c', cheek, 'u_e', underEye, 'l', lips)
+    pr = 'Y'+str(r)+' -> '+'cheeks: '+str(cheek)+'% | under eye: '+str(underEye)+'% | lips: '+str(lips)
+    print(pr)
     sumCheeks += cheek
     sumUnderEye += underEye
     sumLips += lips
