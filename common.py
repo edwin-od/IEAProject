@@ -116,7 +116,7 @@ for r in range(1, YoungScans + 1):
         YoungScans -= 1
         print('Young Scans', YoungScans)
         continue
-    print('Y', r, 'c', cheeks, 'u_e', underEye, 'l', lips)
+    print('Y', r, 'c', cheek, 'u_e', underEye, 'l', lips)
     sumCheeks += cheek
     sumUnderEye += underEye
     sumLips += lips
@@ -145,7 +145,7 @@ for r in range(1, OldScans + 1):
         OldScans -= 1
         print('Old Scans', OldScans)
         continue
-    print('O', r, 'c', cheeks, 'u_e', underEye, 'l', lips)
+    print('O', r, 'c', cheek, 'u_e', underEye, 'l', lips)
     sumCheeks += cheek
     sumUnderEye += underEye
     sumLips += lips
