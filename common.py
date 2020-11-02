@@ -146,7 +146,7 @@ for r in range(1, OldScans + 1):
         OldScans -= 1
         print('ERROR: Old Scans decreased from', OldScans + 1, 'to', OldScans)
         continue
-    pr = 'Y'+str(r)+' -> '+'cheeks: '+str(cheek)+'% | under eye: '+str(underEye)+'% | lips: '+str(lips)
+    pr = 'O'+str(r)+' -> '+'cheeks: '+str(cheek)+'% | under eye: '+str(underEye)+'% | lips: '+str(lips)
     print(pr)
     sumCheeks += cheek
     sumUnderEye += underEye
