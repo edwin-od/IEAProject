@@ -116,7 +116,7 @@ for r in range(1, YoungScans + 1):
         YoungScans -= 1
         print('Young Scans', YoungScans)
         continue
-    print('Y', r)
+    print('Y', r, 'c', cheeks, 'u_e', underEye, 'l', lips)
     sumCheeks += cheek
     sumUnderEye += underEye
     sumLips += lips
@@ -145,7 +145,7 @@ for r in range(1, OldScans + 1):
         OldScans -= 1
         print('Old Scans', OldScans)
         continue
-    print('O', r)
+    print('O', r, 'c', cheeks, 'u_e', underEye, 'l', lips)
     sumCheeks += cheek
     sumUnderEye += underEye
     sumLips += lips
@@ -185,11 +185,11 @@ for i in range(0, OldScans):
     else:
         oldLipsO += 1
         
-print( 'Cheeks Efficiency -> Young',int(((YoungScans-oldCheeksY)/YoungScans)*100),'% Old',
+print('Cheeks Efficiency -> Young',int(((YoungScans-oldCheeksY)/YoungScans)*100),'% Old',
        int(((OldScans-youngCheeksO)/OldScans)*100),'%')
 
-print( 'Under Eye Efficiency -> Young',int(((YoungScans-oldUnderEyeY)/YoungScans)*100),'% Old',
+print('Under Eye Efficiency -> Young',int(((YoungScans-oldUnderEyeY)/YoungScans)*100),'% Old',
        int(((OldScans-youngUnderEyeO)/OldScans)*100),'%')
 
-print( 'Lips Efficiency -> Young',int(((YoungScans-oldLipsY)/YoungScans)*100),'% Old',
+print('Lips Efficiency -> Young',int(((YoungScans-oldLipsY)/YoungScans)*100),'% Old',
        int(((OldScans-oldLipsO)/OldScans)*100),'%')
