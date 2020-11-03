@@ -29,19 +29,20 @@ class KNNTable:
             allDistances[allDistances.index(min(allDistances))] = max(allDistances)
         return neighbors
 
-    def process(this, newIteration, k, weighted):
+    def process(this, newIteration, k):
         neighbors = this.findNeighbors(newIteration, k)
         counters = [0] * len(this.targetOptions)
         for neighbor in neighbors:
             for i in range(0, len(this.targetOptions)):
                 if neighbor.target == this.targetOptions[i]:
-                    if weighted:
-                        d = neighbor.calculateEuclideanDistance(newIteration)
-                        if d == 0:
-                            d = 1
-                        counters[i] += 1 / d
-                    else:
-                        counters[i] += 1
+                    counters[i] += 1
+##                    if weighted:
+##                        d = neighbor.calculateEuclideanDistance(newIteration)
+##                        if d == 0:
+##                            d = 1
+##                        counters[i] += 1 / d
+##                    else:
+##                        counters[i] += 1
         return this.targetOptions[counters.index(max(counters))]
     
 
