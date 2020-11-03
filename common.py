@@ -7,7 +7,7 @@ from IsolatedFeatures import IsolatedFeatures
 r = 11
 path = 'age_25_29'
 
-url = 'cropped\\128\\male\\'+path+'\\pic_'+ str(r)..zfill(4) +'.png'
+url = 'cropped\\128\\male\\'+path+'\\pic_'+ str(r).zfill(4) +'.png'
 
 img = cv2.imread(url)
 img = cv2.resize(img, (320, 400),  interpolation = cv2.INTER_AREA)
