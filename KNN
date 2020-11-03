@@ -1,0 +1,69 @@
+import math
+#import numpy as np
+
+class Iteration:
+    def __init__(this, featureValues, target):
+        this.featureValues = featureValues
+        this.target = target
+        
+    def calculateEuclideanDistance(this, newIteration):
+        sum = 0
+        for i in range(0, len(this.featureValues)):
+            sum += math.pow(
+                (newIteration.featureValues[i] - this.featureValues[i]) , 2)
+        r = math.sqrt(sum)
+        return int(r)
+
+class KNNTable:
+    def __init__(this, iterations, targetOptions):
+        this.iterations = iterations
+        this.targetOptions = targetOptions
+
+    def findNeighbors(this, newIteration, k):
+        allDistances = []
+        for iteration in this.iterations:
+            allDistances.append(iteration.calculateEuclideanDistance(newIteration))
+        neighbors = []
+        for i in range(0, k):
+            neighbors.append(this.iterations[allDistances.index(min(allDistances))])
+            allDistances[allDistances.index(min(allDistances))] = max(allDistances)
+        return neighbors
+
+    def process(this, newIteration, k, weighted):
+        neighbors = this.findNeighbors(newIteration, k)
+        counters = [0] * len(this.targetOptions)
+        for neighbor in neighbors:
+            for i in range(0, len(this.targetOptions)):
+                if neighbor.target == this.targetOptions[i]:
+                    if weighted:
+                        d = neighbor.calculateEuclideanDistance(newIteration)
+                        if d == 0:
+                            d = 1
+                        counters[i] += 1 / d
+                    else:
+                        counters[i] += 1
+        return this.targetOptions[counters.index(max(counters))]
+    
+
+#Test Example Chapter 7 Exercise 7.1
+##
+##A = Iteration([Feature(7), Feature(7)], Feature('Bad'))
+##B = Iteration([Feature(7), Feature(4)], Feature('Bad'))
+##C = Iteration([Feature(3), Feature(4)], Feature('Good'))
+##D = Iteration([Feature(1), Feature(4)], Feature('Good'))
+##
+##table = KNNTable([A, B, C, D], ['Good', 'Bad'])
+##
+##f1 = 3
+##f2 = 7
+##
+##neighbors = table.findNeighbors(Iteration([Feature(f1), Feature(f2)], None), 3)
+##for n in neighbors:
+##    s = ''
+##    for f in n.features:
+##        s += ' ' + str(f.value)
+##    s += ' ' + str(n.target.value)
+##    print(s)
+##print('_________________________')
+##
+##print(' ' + str(f1) + ' ' + str(f2) + ' ' + table.process(Iteration([Feature(f1), Feature(f2)], None, False), 3))
