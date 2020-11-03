@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import dlib
 
-from isolated_features import IsolatedFeatures
+from IsolatedFeatures import IsolatedFeatures
 
 r = 11
 path = 'age_25_29'
