@@ -11,6 +11,13 @@ from KNN import KNNTable
 detector = dlib.get_frontal_face_detector()
 predictor =  dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
+urlYoung = 'cropped\\128\\male\\age_20_24\\pic_'
+urlOld = 'cropped\\128\\male\\age_55_59\\pic_'
+scans = 150
+
+urlNew = 'cropped\\128\\male\\age_60_94\\pic_'
+newIndex = 90
+
 def calculateFacePercentage(url, feature, AdaptiveBlockSize, AdaptiveC):
     img = cv2.imread(url)
     img = cv2.resize(img, (320, 400),  interpolation = cv2.INTER_AREA)
@@ -97,8 +104,6 @@ arrOldUnderEye = []
 arrYoungLips = []
 arrOldLips = []
 
-scans = 25
-
 YoungScans = int(str(int(scans / 2)))
 YoungOffset = 50
 
@@ -113,7 +118,7 @@ LipsBlockSize = 7 #9|5/6/7 or 7|6 -> 9|6 or 7|5/6/7 -> 7|6 best small set - and 
 LipsC = 7
 
 for r in range(1, YoungScans + 1):
-    url = 'cropped\\128\\male\\age_20_24\\pic_' + str(r + YoungOffset).zfill(4) + '.png'
+    url = urlYoung + str(r + YoungOffset).zfill(4) + '.png'
     cheek = calculateFacePercentage(url, 0, CheeksBlockSize, CheeksC)
     underEye = calculateFacePercentage(url, 1, UnderEyeBlockSize, UnderEyeC)
     lips = calculateFacePercentage(url, 2, LipsBlockSize, LipsC)
@@ -131,7 +136,7 @@ for r in range(1, YoungScans + 1):
     arrYoungLips.append(lips)
     
 for r in range(1, OldScans + 1):
-    url = 'cropped\\128\\male\\age_55_59\\pic_' + str(r + OldOffset).zfill(4) + '.png'
+    url = urlOld + str(r + OldOffset).zfill(4) + '.png'
     cheek = calculateFacePercentage(url, 0, CheeksBlockSize, CheeksC)
     underEye = calculateFacePercentage(url, 1, UnderEyeBlockSize, UnderEyeC)
     lips = calculateFacePercentage(url, 2, LipsBlockSize, LipsC)
@@ -215,9 +220,7 @@ for i in range(0, OldScans):
 
 table = KNNTable(iterations, ['young', 'old'])
 
-r = 40
-
-url = 'cropped\\128\\male\\age_25_29\\pic_' + str(r).zfill(4) + '.png'
+url = 'cropped\\128\\male\\age_60_94\\pic_' + str(newIndex).zfill(4) + '.png'
 img1 = cv2.imread(url)
 img1 = cv2.resize(img1, (320, 400),  interpolation = cv2.INTER_AREA)
 cv2.imshow("Face", img1)
@@ -225,11 +228,8 @@ cheek = calculateFacePercentage(url, 0, CheeksBlockSize, CheeksC)
 underEye = calculateFacePercentage(url, 1, UnderEyeBlockSize, UnderEyeC)
 lips = calculateFacePercentage(url, 2, LipsBlockSize, LipsC)
 if min(cheek, underEye, lips) != -1:
-    pr = 'I'+str(r)+' -> '+'cheeks: '+str(cheek)+'% | under eye: '+str(underEye)+'% | lips: '+str(lips)+'%'
+    pr = 'I'+str(newIndex)+' -> '+'cheeks: '+str(cheek)+'% | under eye: '+str(underEye)+'% | lips: '+str(lips)+'%'
     print(pr)
-##    print(table.process(Iteration([arrOldCheeks[i],
-##                                arrOldUnderEye[i],
-##                                arrOldLips[i]], None), int((YoungScans + OldScans) / 2)))
     
     new = Iteration([
         cheek,
@@ -237,7 +237,7 @@ if min(cheek, underEye, lips) != -1:
         lips],
             None)
     
-    k = 7
+    k = 8
     
     neighbors = table.findNeighbors(new, k)
     for n in neighbors:
@@ -248,7 +248,7 @@ if min(cheek, underEye, lips) != -1:
         print(s)
     print('_________________________')
     
-    print(table.process(new, k, False))
+    print(table.process(new, k))
 else:
     print('ERROR: Image could not be processed')
 
